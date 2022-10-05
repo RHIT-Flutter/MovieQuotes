@@ -57,9 +57,69 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<MovieQuote> quotes = [];
 
+  TextEditingController _quoteTextFieldController = TextEditingController();
+  TextEditingController _movieTextFieldController = TextEditingController();
+
+  Future<void> _displayDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Create a quote'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  controller: _quoteTextFieldController,
+                  decoration: InputDecoration(hintText: "Quote"),
+                ),
+                TextField(
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  controller: _movieTextFieldController,
+                  decoration: InputDecoration(hintText: "Movie"),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                child: Text('CANCEL'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              ElevatedButton(
+                child: Text('OK'),
+                onPressed: () {
+                  setState(() {
+                    quotes.add(MovieQuote(
+                        quote: _quoteTextFieldController.text,
+                        movie: _movieTextFieldController.text));
+                    _quoteTextFieldController.text = "";
+                    _movieTextFieldController.text = "";
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    quotes.add(MovieQuote(quote: "I'll be back", movie: "The Terminator"));
+  }
+
   @override
   Widget build(BuildContext context) {
-    quotes.add(MovieQuote(quote: "I'll be back", movie: "The Terminator"));
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -74,7 +134,9 @@ class _MyHomePageState extends State<MyHomePage> {
             .toList(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          _displayDialog(context);
+        },
         tooltip: 'Create a quote',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
