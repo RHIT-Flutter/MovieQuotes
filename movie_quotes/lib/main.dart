@@ -129,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView(
         children: quotes
             .map((mq) => MovieQuoteRowComponent(mq, (String docId) {
-                  print("You pressed the row!");
+                  print("This feature is not implemented yet!");
                 }))
             .toList(),
       ),
