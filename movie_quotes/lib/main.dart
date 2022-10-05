@@ -104,9 +104,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text('OK'),
                 onPressed: () {
                   setState(() {
-                    quotes.add(MovieQuote(
-                        quote: _quoteTextFieldController.text,
-                        movie: _movieTextFieldController.text));
+                    MovieQuotesCollectionManager.instance.add(
+                        _quoteTextFieldController.text,
+                        _movieTextFieldController.text);
+                    // quotes.add(MovieQuote(
+                    //     quote: _quoteTextFieldController.text,
+                    //     movie: _movieTextFieldController.text));
                     _quoteTextFieldController.text = "";
                     _movieTextFieldController.text = "";
                     Navigator.pop(context);
@@ -178,13 +181,17 @@ class MovieQuotesCollectionManager {
 
   // TODO: Figure out a more elegant solution to this silly right hand side.
   CollectionReference primaryRef =
-      FirebaseFirestore.instance.collection("MovieQuotes");
+      FirebaseFirestore.instance.collection("FlutterMovieQuotes");
 
   MovieQuotesCollectionManager._privateConstructor() {
-    primaryRef = FirebaseFirestore.instance.collection("MovieQuotes");
+    primaryRef = FirebaseFirestore.instance.collection("FlutterMovieQuotes");
   }
   static final MovieQuotesCollectionManager instance =
       MovieQuotesCollectionManager._privateConstructor();
+
+  void add(String quote, String movie) {
+    primaryRef.add({"quote": quote, "movie": movie});
+  }
 
   void startListening(Function observer) {
     print("Start listening");
