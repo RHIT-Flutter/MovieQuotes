@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -121,6 +122,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     quotes.add(MovieQuote(quote: "I'll be back", movie: "The Terminator"));
+    MovieQuotesCollectionManager.instance.startListening(() {
+      print("I got called back!");
+      setState(() {});
+    });
   }
 
   @override
@@ -132,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: ListView(
-        children: quotes
+        children: MovieQuotesCollectionManager.instance.values
             .map((mq) => MovieQuoteRowComponent(mq, (String docId) {
                   print("This feature is not implemented yet!");
                 }))
@@ -166,4 +171,37 @@ class MovieQuoteRowComponent extends StatelessWidget {
       trailing: const Icon(Icons.chevron_right),
     );
   }
+}
+
+class MovieQuotesCollectionManager {
+  List<DocumentSnapshot> lastDocumentSnapshots = [];
+
+  // TODO: Figure out a more elegant solution to this silly right hand side.
+  CollectionReference primaryRef =
+      FirebaseFirestore.instance.collection("MovieQuotes");
+
+  MovieQuotesCollectionManager._privateConstructor() {
+    primaryRef = FirebaseFirestore.instance.collection("MovieQuotes");
+  }
+  static final MovieQuotesCollectionManager instance =
+      MovieQuotesCollectionManager._privateConstructor();
+
+  void startListening(Function observer) {
+    print("Start listening");
+    primaryRef.snapshots().listen((QuerySnapshot querySnapshot) {
+      // saveLastDocumentSnapshots(querySnapshot);
+      lastDocumentSnapshots = querySnapshot.docs;
+      observer();
+      for (var doc in querySnapshot.docs) {
+        print(doc.data());
+      }
+    }, onError: (error) {
+      print("Error listening $error");
+    });
+  }
+
+  List<MovieQuote> get values => lastDocumentSnapshots
+      .map(
+          (doc) => MovieQuote(quote: doc.get("quote"), movie: doc.get("movie")))
+      .toList();
 }
