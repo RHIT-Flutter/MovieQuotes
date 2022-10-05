@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "222332732786",
+    "firebase_url": "https://fisherds-moviequotes.firebaseio.com",
+    "project_id": "fisherds-moviequotes",
+    "storage_bucket": "fisherds-moviequotes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222332732786:android:681960c81a84c398a009eb",
+        "android_client_info": {
+          "package_name": "com.example.movie_quotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "222332732786-hn776iidld0sm14ges4duop1i5lusin7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7po5QaRcsgtfg2b2VO3yr-OKj6FXUCrs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "222332732786-hn776iidld0sm14ges4duop1i5lusin7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "222332732786-ftkaq0231djgehl7r1u6mpmh7hs1fbpn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.movieQuotes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
