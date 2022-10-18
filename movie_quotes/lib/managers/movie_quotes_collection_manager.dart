@@ -1,28 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import '../models/movie_quote.dart';
+import 'package:movie_quotes/models/firebase_constants.dart';
+import 'package:movie_quotes/models/movie_quote.dart';
 
 class MovieQuotesCollectionManager {
   List<DocumentSnapshot> lastDocumentSnapshots = [];
-
-  // TODO: Figure out a more elegant solution to this silly right hand side.
-  CollectionReference primaryRef =
-      FirebaseFirestore.instance.collection("FlutterMovieQuotes");
+  late CollectionReference primaryRef;
 
   MovieQuotesCollectionManager._privateConstructor() {
-    primaryRef = FirebaseFirestore.instance.collection("FlutterMovieQuotes");
+    primaryRef =
+        FirebaseFirestore.instance.collection(kMovieQuotesCollectionPath);
   }
   static final MovieQuotesCollectionManager instance =
       MovieQuotesCollectionManager._privateConstructor();
 
-  void add(String quote, String movie) {
-    primaryRef.add({"quote": quote, "movie": movie});
+  void add({required String quote, required String movie}) {
+    primaryRef
+        .add({
+          kMovieQuoteQuote: quote,
+          kMovieQuoteMovie: movie,
+          kMovieQuoteLastTouched: FieldValue.serverTimestamp(),
+        })
+        .then((docRef) => docRef.id)
+        .catchError((error) {
+          print("Failed to add thread: $error");
+          return "";
+        });
   }
 
   void startListening(Function observer) {
-    print("Start listening");
-    primaryRef.snapshots().listen((QuerySnapshot querySnapshot) {
-      // saveLastDocumentSnapshots(querySnapshot);
+    primaryRef
+        .orderBy(kMovieQuoteLastTouched, descending: true)
+        .snapshots()
+        .listen((QuerySnapshot querySnapshot) {
       lastDocumentSnapshots = querySnapshot.docs;
       observer();
       for (var doc in querySnapshot.docs) {
@@ -34,7 +43,7 @@ class MovieQuotesCollectionManager {
   }
 
   List<MovieQuote> get values => lastDocumentSnapshots
-      .map(
-          (doc) => MovieQuote(quote: doc.get("quote"), movie: doc.get("movie")))
+      .map((doc) => MovieQuote(
+          quote: doc.get(kMovieQuoteQuote), movie: doc.get(kMovieQuoteMovie)))
       .toList();
 }

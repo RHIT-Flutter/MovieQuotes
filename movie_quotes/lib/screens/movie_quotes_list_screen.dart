@@ -57,8 +57,8 @@ class MovieQuotesListScreenState extends State<MovieQuotesListScreen> {
                 onPressed: () {
                   setState(() {
                     MovieQuotesCollectionManager.instance.add(
-                        _quoteTextFieldController.text,
-                        _movieTextFieldController.text);
+                        quote: _quoteTextFieldController.text,
+                        movie: _movieTextFieldController.text);
                     // quotes.add(MovieQuote(
                     //     quote: _quoteTextFieldController.text,
                     //     movie: _movieTextFieldController.text));
