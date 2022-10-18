@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:movie_quotes/screens/movie_quote_detail_screen.dart';
+import 'package:movie_quotes/screens/navigation_utils.dart';
 
 import '../components/movie_quote_row_component.dart';
 import '../managers/movie_quotes_collection_manager.dart';
 
 class MovieQuotesListScreen extends StatefulWidget {
-  const MovieQuotesListScreen({super.key, required this.title});
-
-  final String title;
-
   @override
-  State<MovieQuotesListScreen> createState() => MovieQuotesListScreenState();
+  State<MovieQuotesListScreen> createState() => _MovieQuotesListScreenState();
 }
 
-class MovieQuotesListScreenState extends State<MovieQuotesListScreen> {
+class _MovieQuotesListScreenState extends State<MovieQuotesListScreen> {
   // List<MovieQuote> quotes = []; // Done first then replace by Firestore
 
   TextEditingController _quoteTextFieldController = TextEditingController();
@@ -86,9 +84,7 @@ class MovieQuotesListScreenState extends State<MovieQuotesListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text("Movie Quotes"),
       ),
       body: ListView(
         children: getMovieQuoteComponents(),
@@ -99,14 +95,18 @@ class MovieQuotesListScreenState extends State<MovieQuotesListScreen> {
         },
         tooltip: 'Create a quote',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 
   List<MovieQuoteRowComponent> getMovieQuoteComponents() {
     return MovieQuotesCollectionManager.instance.values
         .map((mq) => MovieQuoteRowComponent(mq, (String docId) {
-              print("TODO: Handle a click on a row. $docId");
+              print("Show detail screen for $docId");
+              NavigationUtils.pushScreen(
+                  context: context,
+                  name: kRouteMovieQuoteDetail,
+                  screenArguments: ScreenArguments(documentId: docId));
             }))
         .toList();
   }
