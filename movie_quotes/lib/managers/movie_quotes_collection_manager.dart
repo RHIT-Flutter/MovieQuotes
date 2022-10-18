@@ -34,16 +34,20 @@ class MovieQuotesCollectionManager {
         .listen((QuerySnapshot querySnapshot) {
       lastDocumentSnapshots = querySnapshot.docs;
       observer();
-      for (var doc in querySnapshot.docs) {
-        print(doc.data());
-      }
+      // for (var doc in querySnapshot.docs) {
+      //   print(doc.data());
+      // }
     }, onError: (error) {
       print("Error listening $error");
     });
   }
 
-  List<MovieQuote> get values => lastDocumentSnapshots
-      .map((doc) => MovieQuote(
-          quote: doc.get(kMovieQuoteQuote), movie: doc.get(kMovieQuoteMovie)))
-      .toList();
+  List<MovieQuote> get values =>
+      lastDocumentSnapshots.map((doc) => MovieQuote.from(doc)).toList();
+
+  // List<MovieQuote> get values => lastDocumentSnapshots
+  //     .map((doc) => MovieQuote(
+  //         quote: doc.get(kMovieQuoteQuote),
+  //         movie: doc.get(kMovieQuoteMovie)))
+  //     .toList();
 }

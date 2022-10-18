@@ -78,7 +78,6 @@ class MovieQuotesListScreenState extends State<MovieQuotesListScreen> {
     super.initState();
     //quotes.add(MovieQuote(quote: "I'll be back", movie: "The Terminator"));
     MovieQuotesCollectionManager.instance.startListening(() {
-      print("I got called back!");
       setState(() {});
     });
   }
@@ -107,7 +106,7 @@ class MovieQuotesListScreenState extends State<MovieQuotesListScreen> {
   List<MovieQuoteRowComponent> getMovieQuoteComponents() {
     return MovieQuotesCollectionManager.instance.values
         .map((mq) => MovieQuoteRowComponent(mq, (String docId) {
-              print("TODO: Handle a click on a row.");
+              print("TODO: Handle a click on a row. $docId");
             }))
         .toList();
   }
