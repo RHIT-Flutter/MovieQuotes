@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movie_quotes/managers/movie_quote_document_manager.dart';
+import 'package:movie_quotes/models/movie_quote.dart';
 
 import 'navigation_utils.dart';
 
@@ -20,15 +22,23 @@ class _MovieQuoteDetailScreenState extends State<MovieQuoteDetailScreen> {
   @override
   void initState() {
     super.initState();
+    MovieQuoteDocumentManager.instance.startListeningFor(documentId, () {
+      print("Informed the model object changed.");
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    MovieQuote mq = MovieQuoteDocumentManager.instance.value();
+    String quote = mq.quote;
+    String movie = mq.movie;
+
     return Scaffold(
       appBar: AppBar(title: Text("Movie Quote")),
       backgroundColor: Colors.amber,
       body: Center(
-        child: const Text("Detail page"),
+        child: Text("$quote from $movie"),
       ),
     );
   }
