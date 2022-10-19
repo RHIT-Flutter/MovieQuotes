@@ -26,6 +26,7 @@ class FirestoreModelUtils {
 
   static bool containsField(
           DocumentSnapshot documentSnapshot, String fieldName) =>
+      documentSnapshot.exists &&
       (documentSnapshot.data() as Map<String, dynamic>)
           .containsKey(fieldName) &&
       documentSnapshot.get(fieldName) != null;

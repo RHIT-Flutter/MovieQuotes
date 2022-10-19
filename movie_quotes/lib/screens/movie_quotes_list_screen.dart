@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_quotes/components/dialog_utils.dart';
 import 'package:movie_quotes/screens/movie_quote_detail_screen.dart';
 import 'package:movie_quotes/screens/navigation_utils.dart';
 
@@ -12,64 +13,6 @@ class MovieQuotesListScreen extends StatefulWidget {
 
 class _MovieQuotesListScreenState extends State<MovieQuotesListScreen> {
   // List<MovieQuote> quotes = []; // Done first then replace by Firestore
-
-  TextEditingController _quoteTextFieldController = TextEditingController();
-  TextEditingController _movieTextFieldController = TextEditingController();
-
-  Future<void> _displayDialog(BuildContext context) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Create a quote'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  controller: _quoteTextFieldController,
-                  decoration: InputDecoration(hintText: "Quote"),
-                ),
-                TextField(
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  controller: _movieTextFieldController,
-                  decoration: InputDecoration(hintText: "Movie"),
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              ElevatedButton(
-                child: Text('CANCEL'),
-                onPressed: () {
-                  setState(() {
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-              ElevatedButton(
-                child: Text('OK'),
-                onPressed: () {
-                  setState(() {
-                    MovieQuotesCollectionManager.instance.add(
-                        quote: _quoteTextFieldController.text,
-                        movie: _movieTextFieldController.text);
-                    // quotes.add(MovieQuote(
-                    //     quote: _quoteTextFieldController.text,
-                    //     movie: _movieTextFieldController.text));
-                    _quoteTextFieldController.text = "";
-                    _movieTextFieldController.text = "";
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-            ],
-          );
-        });
-  }
 
   @override
   void initState() {
@@ -91,7 +34,8 @@ class _MovieQuotesListScreenState extends State<MovieQuotesListScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _displayDialog(context);
+          print("You pressed the FAB");
+          DialogUtils.showMovieQuoteDialog(context: context);
         },
         tooltip: 'Create a quote',
         child: const Icon(Icons.add),
